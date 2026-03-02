@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weekly Checklist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --king-color: #c9a84c;
+      --ben-color: #6ec6a0;
+      --bg: #0e0e0e;
+      --card-bg: #161616;
+      --text: #e8e8e8;
+      --muted: #555;
+      --border: #2a2a2a;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 48px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      margin-bottom: 48px;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      width: 100%;
+      max-width: 860px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .card.king::before { background: var(--king-color); }
+    .card.ben::before  { background: var(--ben-color); }
+
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .card-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.15em;
+      line-height: 1;
+    }
+
+    .card.king .card-header h2 { color: var(--king-color); }
+    .card.ben  .card-header h2 { color: var(--ben-color); }
+
+    .card-header span {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s;
+      user-select: none;
+    }
+
+    .checklist li:hover { background: #1e1e1e; }
+
+    .checklist li.done { opacity: 0.4; }
+
+    .checklist li.done .item-text {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .card.king .checklist li.done .checkbox {
+      background: var(--king-color);
+      border-color: var(--king-color);
+    }
+    .card.ben .checklist li.done .checkbox {
+      background: var(--ben-color);
+      border-color: var(--ben-color);
+    }
+
+    .checkbox svg { display: none; width: 10px; height: 10px; }
+    .done .checkbox svg { display: block; }
+
+    .item-text {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .progress-bar {
+      margin-top: 28px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .card.king .progress-fill { background: var(--king-color); }
+    .card.ben  .progress-fill { background: var(--ben-color); }
+
+    .progress-label {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 500px) {
+      body { padding: 32px 16px; }
+      .card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="page-title">Weekly Goals</p>
+
+  <div class="grid">
+
+    <!-- KING -->
+    <div class="card king" id="card-king">
+      <div class="card-header">
+        <h2>KING</h2>
+        <span>Session 01</span>
+      </div>
+      <ul class="checklist" id="list-king">
+        <li onclick="toggle(this, 'king')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Complete a total of 20km run within the week</span>
+        </li>
+        <li onclick="toggle(this, 'king')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Go with 60–100 pushups 4 times in the week</span>
+        </li>
+        <li onclick="toggle(this, 'king')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Get to 70% of the current squad project</span>
+        </li>
+        <li onclick="toggle(this, 'king')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Go back to computer networking fundamentals</span>
+        </li>
+        <li onclick="toggle(this, 'king')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Submit an internship letter at the Dodowa hospital tomorrow</span>
+        </li>
+        <li onclick="toggle(this, 'king')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Travel to the eastside to help dad with work if not called for the internship</span>
+        </li>
+      </ul>
+      <div class="progress-bar"><div class="progress-fill" id="fill-king"></div></div>
+      <p class="progress-label" id="label-king">0 of 6 completed</p>
+    </div>
+
+    <!-- BEN -->
+    <div class="card ben" id="card-ben">
+      <div class="card-header">
+        <h2>BEN</h2>
+        <span>Session 02</span>
+      </div>
+      <ul class="checklist" id="list-ben">
+        <li onclick="toggle(this, 'ben')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Finish C programming</span>
+        </li>
+        <li onclick="toggle(this, 'ben')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Finish Excel and Word for academic purposes</span>
+        </li>
+        <li onclick="toggle(this, 'ben')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Jog twice this week</span>
+        </li>
+        <li onclick="toggle(this, 'ben')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">100 pushups everyday excluding today</span>
+        </li>
+        <li onclick="toggle(this, 'ben')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Finish reading a book and three chapters</span>
+        </li>
+        <li onclick="toggle(this, 'ben')">
+          <span class="checkbox"><svg viewBox="0 0 10 8" fill="none"><polyline points="1,4 4,7 9,1" stroke="#0e0e0e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="item-text">Listen to only one podcast everyday</span>
+        </li>
+      </ul>
+      <div class="progress-bar"><div class="progress-fill" id="fill-ben"></div></div>
+      <p class="progress-label" id="label-ben">0 of 6 completed</p>
+    </div>
+
+  </div>
+
+  <script>
+    function toggle(li, id) {
+      li.classList.toggle('done');
+      updateProgress(id);
+    }
+
+    function updateProgress(id) {
+      const list = document.getElementById('list-' + id);
+      const items = list.querySelectorAll('li');
+      const done = list.querySelectorAll('li.done').length;
+      const total = items.length;
+      const pct = Math.round((done / total) * 100);
+      document.getElementById('fill-' + id).style.width = pct + '%';
+      document.getElementById('label-' + id).textContent = done + ' of ' + total + ' completed';
+    }
+  </script>
+</body>
+</html>
